@@ -1,37 +1,51 @@
 class Clock(object):
     def __init__(self, hour, minute):
-        minute_to_hour, minute = self.__calculate_minute(minute)
-        hour = self.__calculate_hour(minute_to_hour, hour)
+        extra_hours, minute = self.__calculate_minute(minute)
+        hour = self.__calculate_hour(extra_hours, hour)
 
         self.hour = hour
         self.minute = minute
 
     def __calculate_minute(self, minute):
-        extra_hour = 0
-        while (minute < 0):
-            minute += 60
-            extra_hour += 1
+        result = (0, 0)
 
-        final_minute = minute % 60
-        result = (-extra_hour, final_minute)
-
-        if minute >= 60:
-            minute_to_hour = minute - final_minute
-            print(minute_to_hour)
-            result = (minute_to_hour, final_minute)
-
+        if minute >= 0:
+            final_minute = minute % 60
+            extra_hours = self.__extra_hours(minute)
+            result = (extra_hours, final_minute)
+        else:
+            hours_for_decrement, minute = self.__normalize_minute(minute)
+            result = (hours_for_decrement, minute)
         return result
 
-    def __calculate_hour(self, minute_to_hour, hour):
+    def __calculate_hour(self, extra_hours, hour):
+        hour += extra_hours
+        hour = self.__normalize_hour(hour)
+        return hour % 24
+
+    def __normalize_minute(self, minute):
+        hours_for_decrement = 0
+        while (minute < 0):
+            minute += 60
+            hours_for_decrement -= 1
+        return (hours_for_decrement, minute)
+
+    def __normalize_hour(self, hour):
         while (hour < 0):
             hour += 24
+        return hour
 
-        return (hour + minute_to_hour) % 24
+    def __extra_hours(self, minutes):
+        extra_hours = 0
+        while(minutes > 59):
+            minutes -= 60
+            extra_hours += 1
+        return extra_hours
 
     def __repr__(self):
-        hour = self.__hour_representation(self.hour)
-        minute = self.__minute_representation(self.minute)
-        return "{0}:{1}".format(hour, minute)
+        hour_representation = self.__hour_representation(self.hour)
+        minute_representation = self.__minute_representation(self.minute)
+        return "{0}:{1}".format(hour_representation, minute_representation)
 
     def __hour_representation(self, hour):
         if hour >= 0 and hour < 10:
@@ -46,16 +60,10 @@ class Clock(object):
             return str(minute)
 
     def __eq__(self, other):
-        return self.minute == other.minute and self.hour == other.hour
+        return self.hour == other.hour and self.minute == other.minute
 
     def __add__(self, minutes):
         return Clock(self.hour, self.minute + minutes)
 
     def __sub__(self, minutes):
         return Clock(self.hour, self.minute - minutes)
-
-
-clock = Clock(1, 60)
-
-print(clock.minute)
-print(clock.hour)
