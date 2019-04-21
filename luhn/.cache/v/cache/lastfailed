@@ -1,0 +1,6 @@
+{
+  "luhn_test.py::LuhnTest::test_a_simple_valid_SIN_that_remains_valid_if_reversed": true, 
+  "luhn_test.py::LuhnTest::test_a_valid_Canadian_SIN": true, 
+  "luhn_test.py::LuhnTest::test_input_digit_9_is_correctly_converted_to_output_digit_9": true, 
+  "luhn_test.py::LuhnTest::test_is_valid_can_be_called_repeatedly": true
+}

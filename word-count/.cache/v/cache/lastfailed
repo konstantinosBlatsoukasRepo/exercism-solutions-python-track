@@ -1,0 +1,4 @@
+{
+  "word_count_test.py::WordCountTest::test_alternating_word_separators": true, 
+  "word_count_test.py::WordCountTest::test_quotations": true
+}
